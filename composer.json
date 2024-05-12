@@ -1,0 +1,26 @@
+{
+    "name": "lenovo/php",
+    "authors": [
+        {
+            "name": "RusselDC",
+            "email": "russel.delacruz.dc@bulsu.edu.ph"
+        }
+    ],
+    "require": {
+        "illuminate/collections": "^10.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/",
+            "Http\\": "Http/"
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
