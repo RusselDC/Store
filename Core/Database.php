@@ -37,6 +37,13 @@ class Database
         return $this->fetch();
     }
 
+    public function unique($table, $column, $value)
+    {
+        $this->statement = $this->conn->prepare("SELECT * FROM $table WHERE $column = ?");
+        $this->statement->execute([$value]);
+        return $this->fetch();
+    }
+
     public function get()
     {
         return $this->statement->fetchAll();
