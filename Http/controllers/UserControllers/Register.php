@@ -2,9 +2,12 @@
 use Core\Validator;
 use Core\App;
 use Core\Database;
-use Http\Forms\RegisterForm;
+
 $conn = App::resolve(Database::class);
-$register = new RegisterForm();
+
+use Core\InputRules;
+$validate = new InputRules();
+
 
 $postData  = array(
     'email' => $_POST['email'] ?? null,
@@ -17,26 +20,28 @@ $postData  = array(
 );
 
 
+$rules = 
+[
+    'email' => 'required|email|unique:users,email',
+    'password' => 'required|min:8|max:16',
+    'password_confirmation' => 'required|same:password',
+    'first_name' => 'required|string',
+    'last_name' => 'required|string',
+    'phone' => 'required|number|min:10|max:10|unique:profile,phone',
+    'address' => 'required|string',
+];
 
-$validation = $register->validator(
-    $postData['email'],
-    $postData['password'],
-    $postData['password_confirmation'],
-    $postData['first_name'],
-    $postData['last_name'],
-    $postData['phone'],
-    $postData['address']
-);
 
-if (count($validation) > 0) {
-    exit(json_encode($validation));
+
+$validate->validate($rules);
+if($validate->errors()){
+    exit(json_encode(['errors'=>$validate->errors()]));
 }
+
+
 
 $emailResult = $conn->query("SELECT * FROM users WHERE email = ?", [$postData['email']])->fetch();
 
-if ($emailResult) {
-    exit(json_encode(['email' => 'Email already exists']));
-}
 
 $hash = password_hash($postData['password'], PASSWORD_BCRYPT);
 

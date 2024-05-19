@@ -2,8 +2,11 @@
 
 use Core\App;
 use Core\Database;
-use Http\Forms\BuyForm;
-$form =  new BuyForm();
+
+use Core\InputRules;
+$validate = new InputRules();
+
+
 $conn = App::resolve(Database::class);
 
 $quantity = $_POST['quantity'];
@@ -13,25 +16,15 @@ $token = getallheaders()['token'];
 $token = $conn->findbyColumn('auth_token', 'token', $token);
 $user = $conn->find('users', $token['user_id']);
 
-$validated = $form->validate($quantity);
-if(!empty($validated)){
-    exit(json_encode($validated));
-}
 
-$products = $form->product($productID);
-if(!$products){
-    exit(json_encode(['error' => 'Product not found']));
-}
-$store = $form->store($products['store_id']);
-if(!$store){
-    exit(json_encode(['error' => 'Store not found']));
-}
+$validate->validate([
+    'quantity' => "required|min:1|number|lessThan:products,quantity_available,".$_POST['id'],
+    'id' => "required|min:1|number|exists:products,id"
+]);
 
-$quantityCheck = $form->checkQuantity($quantity, $products['quantity_available']);
-
-if(!empty($quantityCheck)){
-    exit(json_encode($quantityCheck));
-}
+if ($validate->errors()) {
+    exit(json_encode(['error' => $validate->errors()]));
+};
 
 
 

@@ -2,33 +2,31 @@
  
 use Core\App;
 use Core\Database;
-use Http\Forms\RestockForm;
 
+use Core\InputRules;
+$validate = new InputRules();
 $conn = App::resolve(Database::class);
-$restockForm = new RestockForm();
 
 
 
 
 
-$id = $_GET['id'];
+
+$id = $_POST['id'];
 $quantity = $_POST['quantity'];
 $date = $_POST['date'];
 
-if(!$id){
-    exit(json_encode(['error' => 'Product ID is required']));
-}
 
-$validate = $restockForm->validate($quantity,$date);
-if(!empty($validate)){
-    exit(json_encode($validate));
-}
+$validate->validate([
+    'id' => "required|min:1|number|exists:products,id",
+    'quantity' => "required|min:1|number",
+    'date' => "required|date"
+]);
 
-$checkProduct = $restockForm->checkProduct($id);
+if ($validate->errors()) {
+    exit(json_encode(['error' => $validate->errors()]));
+};
 
-if(!empty($checkProduct)){
-    exit(json_encode($checkProduct));
-}
 
 $conn->query("UPDATE products SET quantity = quantity + ? WHERE id = ?", [$quantity, $id]);
 $conn->query("INSERT INTO restocks (product_id, quantity, restock_date) VALUES (?, ?, ?)", [$id, $quantity, $date]);

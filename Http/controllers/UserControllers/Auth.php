@@ -2,18 +2,27 @@
 use Core\Validator;
 use Core\App;
 use Core\Database;
-use Http\Forms\LoginForm;
+use Core\InputRules;
 $conn = App::resolve(Database::class);
-$form = new LoginForm();
+$validate = new InputRules();
+
 
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-$validation = $form->validate($email, $password);
 
-if (count($validation) > 0) {
-    exit(json_encode($validation));
+$rules = [
+    'email' => 'required|email',
+    'password' => 'required|min:6|max:20'
+];
+
+if(!$validate->validate($rules)){
+    exit(json_encode(['errors'=>$validate->errors()]));
 }
+
+
+
+
 
 
 $userResult = $conn->query("SELECT * FROM users WHERE email = ?", [$email])->fetch();

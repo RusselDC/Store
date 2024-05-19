@@ -11,19 +11,22 @@ class InputRules
     protected $errors = [];
     protected $conn;
 
-    private function __construct()
+    public function __construct()
     {
-        $conn = App::resolve(Database::class);
+        $this->conn = App::resolve(Database::class);
     }
 
     public function validate($inputs)
     {
+        
         foreach ($inputs as $field => $details) {
+            
             $value = $_POST[$field] ?? null;
-            $rules = explode('|', $details['rules']);
+            $rules = explode('|', $details);
             foreach ($rules as $rule) {
                 if (strpos($rule, ':')) {
                     list($ruleName, $ruleValue) = explode(':', $rule);
+                    
                     $this->$ruleName($field, $value, $ruleValue);
                 } else {
                     $this->$rule($field, $value);
@@ -37,6 +40,25 @@ class InputRules
     public function errors()
     {
         return $this->errors;
+    }
+
+    protected function date($field, $value)
+    {
+        if (!strtotime($value)) {
+            $this->errors[$field][] = "$field must be a valid date.";
+        }
+    }
+
+    protected function image($field, $value)
+    {
+        if(isset($_FILES[$field]))
+        {
+            $image = $_FILES[$field];
+            $imageType = explode('/', $image['type'])[0];
+            if ($imageType !== 'image') {
+                $this->errors[$field][] = "$field must be an image.";
+            }
+        }
     }
 
     protected function required($field, $value)
@@ -115,43 +137,58 @@ class InputRules
         $table = $tableData[0];
         $column = $tableData[1];
         $unique = $this->conn->unique($table, $column, $value);
+        
         if ($unique) {
             $this->errors[$field][] = "$field already exists.";
         }
         
     }
 
+    protected function exists($field, $value, $tableData)
+    {
+        $tableData = explode(',', $tableData);
+        $table = $tableData[0];
+        $column = $tableData[1];
+        $unique = $this->conn->unique($table, $column, $value);
+        if (!$unique) {
+            $this->errors[$field][] = "$field does not exist.";
+        }
+        
+    }
+
+    protected function same($field, $value, $field2)
+    {
+        if ($value !== $_POST[$field2]) {
+            $this->errors[$field][] = "$field must be the same as $field2.";
+        }
+    }
+
+    protected function lessThan($field, $value, $tableData)
+    {
+        
+        $tableData = explode(',', $tableData);
+        $table = $tableData[0];
+        $column = $tableData[1];
+        $id = $tableData[2];
+        $newTable = $this->conn->find($table, $id);
+        if ($value > $newTable[$column]) {
+            $this->errors[$field][] = "$field must be less than $column.";
+        }
+    }
+
+    protected function moreThan($field, $value, $tableData)
+    {
+        $tableData = explode(',', $tableData);
+        $table = $tableData[0];
+        $column = $tableData[1];
+        $id = $tableData[2];
+        $newTable = $this->conn->find($table, $id);
+        if ($value < $newTable[$column]) {
+            $this->errors[$field][] = "$field must be more than $column.";
+        }
+    }
+
+    
+
     // Add more custom validation methods as needed
 }
-
-
-/*
-use case
-
-
-<?php
-
-require 'InputRules.php';
-
-$rules = [
-    'name' => [
-        'rules' => 'required|string|min:3|max:50'
-    ],
-    'email' => [
-        'rules' => 'required|email|unique:users,email'
-    ],
-    'age' => [
-        'rules' => 'required|number|min:18|max:99'
-    ]
-];
-
-$validator = new InputRules();
-
-if ($validator->validate($rules)) {
-    echo "Validation passed!";
-    // Process the validated data
-} else {
-    echo "Validation failed!";
-    print_r($validator->errors());
-}
-*/

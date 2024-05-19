@@ -2,9 +2,10 @@
 
 use Core\App;
 use Core\Database;
-use Http\Forms\ProductForm;
+
 $conn = App::resolve(Database::class);
-$productForm = new ProductForm();
+use Core\InputRules;
+$validate = new InputRules();
 $token = getallheaders()['token'];
 
 
@@ -15,13 +16,17 @@ $price = $_POST['price'] ?? null;
 $image = (!empty($_FILES['image'])) ? $_FILES['image'] : "default.png";
 $quantity = $_POST['quantity'] ?? null;
 
+$validate->validate([
+    'name' => "required",
+    'description' => "required",
+    'price' => "required|float",
+    'quantity' => "required|number",
+    'image' => "required|image"
+]);
 
-
-$validated = $productForm->validate($name, $description, $quantity, $price);
-
-if(!empty($validated))
+if($validate->errors())
 {
-    exit(json_encode($validated));
+    exit(json_encode(['error' => $validate->errors()]));
 }
 
 
