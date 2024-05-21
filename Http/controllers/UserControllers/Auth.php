@@ -37,7 +37,7 @@ if (!password_verify($password, $userResult['password'])) {
 
 $profile = $conn->query("SELECT users.email, users.id, profile.* FROM users JOIN profile ON users.id = profile.user_id WHERE users.id = ?
 ", [$userResult['id']])->fetch();
-$token = uniqid();;
+$token = uniqid();
 
 
 $conn->query("INSERT INTO `auth_token`(`user_id`, `token`) VALUES (?,?)",[$userResult['id'], $token]);
