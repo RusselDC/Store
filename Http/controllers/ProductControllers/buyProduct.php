@@ -34,7 +34,7 @@ $storeID = $store['id'];
 $orderID = "ORD-$storeID-$userID-$productID-".uniqid()."-".time();
 $totalPrice = $products['price'] * $quantity;
 
-$conn->query("INSERT INTO orders (order_id, customer_id, store_id, total_price) VALUES (?, ?, ?, ?)", 
+$conn->query("INSERT INTO orders (order_id, user_id, store_id, total_price) VALUES (?, ?, ?, ?)", 
 [$orderID, $userID, $storeID, $totalPrice]);
 
 $order = $conn->findbyColumn('orders', 'order_id', $orderID);

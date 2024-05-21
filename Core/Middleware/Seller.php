@@ -3,6 +3,7 @@
 namespace Core\Middleware;
 use Core\Database;
 use Core\App;
+use Core\User;
 
 
 class Seller 
@@ -34,5 +35,7 @@ class Seller
         {
             exit(json_encode(['error' => 'Only Seller Here']));
         }
+
+        User::Auth($user);
     }
 }

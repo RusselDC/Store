@@ -3,6 +3,12 @@
 
 use Core\App;
 use Core\Database;
+use Core\User;
+
+
+
+exit(json_encode(['User'=>User::user()]));
+
 $conn = App::resolve(Database::class);
 
 $id = getallheaders()['token'];

@@ -27,7 +27,7 @@ $rules =
     'password_confirmation' => 'required|same:password',
     'first_name' => 'required|string',
     'last_name' => 'required|string',
-    'phone' => 'required|number|min:10|max:10|unique:profile,phone',
+    'phone' => 'required|number|min:10|max:11|unique:profile,phone',
     'address' => 'required|string',
 ];
 
