@@ -4,6 +4,9 @@ use Core\Middleware\Auth;
 use Core\Middleware\Guest;
 use Core\Middleware\Seller;
 use Core\Middleware\Middleware;
+use Core\Response;
+use Core\ResponseCode;
+
 
 class Router
 {
@@ -50,6 +53,7 @@ class Router
 
     public function route($uri,$method)
     {
+        
         foreach($this->routes as $route)
         {
             if($route['uri'] == $uri && $route['method'] == strtoupper($method))
@@ -69,15 +73,11 @@ class Router
                 return require base_path('Http/controllers/'.$route['controller']);
             }
         }
-        $this->abort(404);
+        $this->abort();
     }
-    protected function abort($code = 404)
+    protected function abort()
     {
-        http_response_code($code);
-
-        require base_path("views/{$code}.php");
-
-        die();
+        Response::json(['message'=>'Route not found'],ResponseCode::NOT_FOUND);
     }
 }
 

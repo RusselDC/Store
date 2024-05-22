@@ -4,17 +4,9 @@
 use Core\App;
 use Core\Database;
 use Core\User;
-
-
-
-exit(json_encode(['User'=>User::user()]));
-
+use Core\Response;
+use Core\ResponseCode;
 $conn = App::resolve(Database::class);
-
-$id = getallheaders()['token'];
-
-
-$userID = $conn->query("SELECT user_id FROM `auth_token` WHERE token = ?", [$id])->fetch();
-$conn->query("DELETE FROM `auth_token` WHERE user_id = ?", [$userID['user_id']]);
-exit(json_encode(['success' => 'Logged out successfully']));
+$conn->query("DELETE FROM `auth_token` WHERE user_id = ?", [User::user()['id']]);
+Response::json(['message' => 'Logged Out'], ResponseCode::OK);
 

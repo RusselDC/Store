@@ -4,6 +4,8 @@ use Core\App;
 use Core\Database;
 use Core\InputRules;
 use Core\User;
+use Core\Response;
+use Core\ResponseCode;
 $conn = App::resolve(Database::class);
 
 $validate = new InputRules();
@@ -37,11 +39,11 @@ try
     
     $conn->query("INSERT INTO `store` (name, email, address, phone, user_id) VALUES (?, ?, ?, ?, ?)", [$name, $email, $address, $phone, $user['id']]);
     
-    exit(json_encode(['success' => 'Store created successfully']));
+    Response::json(['message' => 'Store Created'], ResponseCode::CREATED);
 }
 catch(Exception $e)
 {
-    exit(json_encode(['error' => $e->getMessage()]));
+    Response::json(['error' => $e->getMessage()], ResponseCode::INTERNAL_SERVER_ERROR);
 }
 
 

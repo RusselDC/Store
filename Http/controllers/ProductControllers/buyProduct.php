@@ -4,6 +4,8 @@ use Core\App;
 use Core\Database;
 
 use Core\InputRules;
+use Core\Response;
+use Core\ResponseCode;
 $validate = new InputRules();
 
 
@@ -23,7 +25,7 @@ $validate->validate([
 ]);
 
 if ($validate->errors()) {
-    exit(json_encode(['error' => $validate->errors()]));
+    Response::json(['errors' => $validate->errors()], ResponseCode::UNPROCESSABLE_ENTITY);
 };
 
 
@@ -44,7 +46,7 @@ $conn->query("INSERT INTO order_details (order_id, product_id, quantity, price) 
 
 $conn->query("UPDATE products SET quantity_available = ? WHERE id = ?", [$products['quantity_available'] - $quantity, $productID]);
 
-exit(json_encode(['success' => 'Order placed successfully', 'order_id' => $orderID]));
+Response::json(['message' => 'Product Bought'], ResponseCode::OK);
 
 
 

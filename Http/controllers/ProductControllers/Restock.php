@@ -4,6 +4,8 @@ use Core\App;
 use Core\Database;
 
 use Core\InputRules;
+use Core\Response;
+use Core\ResponseCode;
 $validate = new InputRules();
 $conn = App::resolve(Database::class);
 
@@ -24,14 +26,14 @@ $validate->validate([
 ]);
 
 if ($validate->errors()) {
-    exit(json_encode(['error' => $validate->errors()]));
+    Response::json(['errors' => $validate->errors()], ResponseCode::UNPROCESSABLE_ENTITY);
 };
 
 
 $conn->query("UPDATE products SET quantity = quantity + ? WHERE id = ?", [$quantity, $id]);
 $conn->query("INSERT INTO restocks (product_id, quantity, restock_date) VALUES (?, ?, ?)", [$id, $quantity, $date]);
 
-exit(json_encode(['success' => 'Product restocked successfully']));
+Response::json(['message' => 'Product Restocked'], ResponseCode::OK);
 
 
 
