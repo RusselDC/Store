@@ -18,8 +18,9 @@ $rules = [
     'email' => 'required|email',
     'password' => 'required|min:6|max:20'
 ];
+$validate->validate($rules);
 
-if(!$validate->validate($rules)){
+if(!$validate->errors()){
     Response::json(['errors' => $validate->errors()], ResponseCode::UNPROCESSABLE_ENTITY);
 }
 

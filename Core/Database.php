@@ -2,6 +2,11 @@
 
 namespace Core;
 use PDO;
+use Core\ResponseCode;
+use Core\Response;
+
+
+
 class Database
 {
     public $conn;
@@ -28,6 +33,23 @@ class Database
         $this->statement = $this->conn->prepare("SELECT * FROM $table WHERE id = ?");
         $this->statement->execute([$id]);
         return $this->fetch();
+    }
+
+    public function insert($table, $data)
+    {
+        $columns = implode(',', array_keys($data));
+        $values = implode(',', array_fill(0, count($data), '?'));
+        $this->statement = $this->conn->prepare("INSERT INTO $table ($columns) VALUES ($values)");
+        $this->statement->execute(array_values($data));
+        return $this->conn->lastInsertId();
+    }
+
+    public function update($table, $data, $id)
+    {
+        $columns = implode('=?,', array_keys($data)).'=?';
+        $this->statement = $this->conn->prepare("UPDATE $table SET $columns WHERE id = ?");
+        $this->statement->execute(array_merge(array_values($data), [$id]));
+        return $this->statement->rowCount();
     }
 
     public function findbyColumn($table, $column, $id)
@@ -58,7 +80,7 @@ class Database
         $result = $this->fetch();
         if(!$result)
         {
-            abort(RESPONSE::NOT_FOUND);
+            Response::json(['message' => 'Record not found'],ResponseCode::NOT_FOUND);
         }
         return $result;
     }

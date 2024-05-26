@@ -58,6 +58,7 @@ class ComposerStaticInit5c501f4cd1b8b2d3b3cebfacf93ac2db
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
+            'Predis\\' => 7,
             'PhpParser\\' => 10,
             'Phinx\\' => 6,
             'Pest\\Plugin\\' => 12,
@@ -66,6 +67,7 @@ class ComposerStaticInit5c501f4cd1b8b2d3b3cebfacf93ac2db
             'ParaTest\\' => 9,
             'PHPUnit\\Architecture\\' => 21,
             'PHPStan\\PhpDocParser\\' => 21,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'N' => 
         array (
@@ -183,6 +185,10 @@ class ComposerStaticInit5c501f4cd1b8b2d3b3cebfacf93ac2db
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'Predis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/predis/predis/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -214,6 +220,10 @@ class ComposerStaticInit5c501f4cd1b8b2d3b3cebfacf93ac2db
         'PHPStan\\PhpDocParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'NunoMaduro\\Collision\\' => 
         array (
