@@ -40,7 +40,7 @@ class Mail
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'dencare2023@gmail.com';
-            $mail->Password = 'hxrxkhafgjbeqtth';
+            $mail->Password = '';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
