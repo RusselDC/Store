@@ -3,4 +3,4 @@ use Core\Response;
 use Core\ResponseCode;
 use Core\App;
 
-Response::json(['hello'=>"Hello World"], ResponseCode::OK)
+Response::json(['hello'=>"Hello Lang"], ResponseCode::OK);

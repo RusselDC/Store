@@ -3,7 +3,7 @@
         'name' => 'lenovo/php',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '87655b678b3d4ae507bab3b2dd4946308d14b6a5',
+        'reference' => '41ebb468e14a0b0ce32cbf8bd1e03c0640756153',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -148,7 +148,7 @@
         'lenovo/php' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '87655b678b3d4ae507bab3b2dd4946308d14b6a5',
+            'reference' => '41ebb468e14a0b0ce32cbf8bd1e03c0640756153',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

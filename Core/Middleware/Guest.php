@@ -20,10 +20,14 @@ class Guest
     {
         $conn = $this->getConnection();
         $token = getallheaders()['token'] ?? null;
-        $separated = explode("|", $token);
+        if ($token !== null) {
+            $separated = explode("|", $token);
+        } else {
+            $separated = [0]; // Or handle it according to your application logic
+        }
         $id = $separated[0];
 
-        $userID =  $conn->query("SELECT user_id FROM `auth_token` WHERE token = ?", [$token])->fetch();
+        $userID =  $conn->query("SELECT user_id FROM auth_token WHERE token = ?", [$token])->fetch();
 
         if($userID)
         {

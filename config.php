@@ -2,10 +2,11 @@
 
 return [
     'database' => [
-        'host'=>'localhost',
-        'port'=>3306,
-        'dbname'=>'store_new',
-        'charset'=>'utf8mb4'
+        'host'=>'store_db_1',
+        'port'=>5432,
+        'dbname'=>'store',
+        'password'=>'Russeldc189',
+        'charset'=>'utf8'
     ]
 ];
 

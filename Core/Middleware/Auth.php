@@ -24,7 +24,7 @@ class Auth
             exit(json_encode(['error' => 'Invalid Request']));
         }
 
-        $userID =  $conn->query("SELECT user_id FROM `auth_token` WHERE token = ?", [$token])->fetch();
+        $userID =  $conn->query("SELECT user_id FROM auth_token WHERE token = ?", [$token])->fetch();
 
         if(!$userID)
         {

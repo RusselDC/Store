@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"  # Ensure this line is present
+    volumes:
+      - .:/var/www/html
+    command: php -S 0.0.0.0:8000 -t public  # Command to start the PHP built-in server
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  db:
+    image: postgres:15 # Use the official Postgres image
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Russeldc189
+      POSTGRES_DB: store
+    ports:
+      - "5433:5432"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:

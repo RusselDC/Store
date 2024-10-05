@@ -70,21 +70,22 @@ class InputRules
 
     protected function min($field, $value, $min)
     {
-        if (strlen($value) < $min) {
+        if ($value !== null && strlen($value) < $min) {
             $this->errors[$field][] = "$field must be at least $min characters.";
         }
+        
     }
 
     protected function max($field, $value, $max)
     {
-        if (strlen($value) > $max) {
+        if ($value !== null && strlen($value) > $max) {
             $this->errors[$field][] = "$field must be no more than $max characters.";
         }
     }
 
     protected function length($field, $value, $length)
     {
-        if (strlen($value) != $length) {
+        if ($value !== null && strlen($value) != $length) {
             $this->errors[$field][] = "$field must be exactly $length characters.";
         }
     }

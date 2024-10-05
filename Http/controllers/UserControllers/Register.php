@@ -11,6 +11,8 @@ try
     $conn = App::resolve(Database::class);
     $validate = new InputRules();
     
+    
+
     $rules = 
     [
         'email' => 'required|email|unique:users,email',
@@ -31,12 +33,12 @@ try
 
     $hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
     
-    $conn->query("INSERT INTO `users`(`email`, `password`) VALUES (?,?)",[ $_POST['email'], $hash]);
+    $conn->query("INSERT INTO users(email, password) VALUES (?,?)",[ $_POST['email'], $hash]);
     
     $id = $conn->query("SELECT id FROM users WHERE email = ?", [$_POST['email']])->fetch();
     
     
-    $conn->query("INSERT INTO `profile`(`first_name`, `last_name`, `phone`, `address`, `user_id`) VALUES (?,?,?,?,?)",
+    $conn->query("INSERT INTO profile(first_name, last_name, phone, address, user_id) VALUES (?,?,?,?,?)",
         [$_POST['first_name'], $_POST['last_name'], $_POST['phone'], $_POST['address'], $id['id']]);
     
    Response::json(['message' => 'User Registered'], ResponseCode::CREATED);

@@ -44,7 +44,7 @@ $profile = $conn->query("SELECT users.email, users.id, profile.* FROM users JOIN
 $token = $userResult['id']."|".date("YmdHis").uniqid();
 
 
-$conn->query("INSERT INTO `auth_token`(`user_id`, `token`) VALUES (?,?)",[$userResult['id'], $token]);
+$conn->query("INSERT INTO auth_token(user_id, token) VALUES (?,?)",[$userResult['id'], $token]);
 
 Response::json(['token' => $token, 'user' => $profile, 'message'=>'Logged In'], ResponseCode::OK);
 

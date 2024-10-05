@@ -22,14 +22,14 @@ class Seller
             exit(json_encode(['error' => 'Invalid Request']));
         }
 
-        $userID =  $conn->query("SELECT user_id FROM `auth_token` WHERE token = ?", [$token])->fetch();
+        $userID =  $conn->query("SELECT user_id FROM auth_token WHERE token = ?", [$token])->fetch();
 
         if(!$userID)
         {
             exit(json_encode(['error' => 'Unauthorized']));
         }
 
-        $user = $conn->query("SELECT * FROM `users` WHERE id = ?", [$userID['user_id']])->fetch();
+        $user = $conn->query("SELECT * FROM users WHERE id = ?", [$userID['user_id']])->fetch();
 
         if($user['is_seller'] == 0)
         {

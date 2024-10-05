@@ -11,14 +11,23 @@ class Database
 {
     public $conn;
     public $statement;
-    public function __construct($config,$username = 'root',$password = '')
-    {   
-        $dsn = 'mysql:'.http_build_query($config,'',';');
-        //$dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset={$config['charset']}";
-        $this->conn = new PDO($dsn, $username,$password,[
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    public function __construct($config, $username = 'postgres', $password = 'Russeldc189')
+{   
+    // Construct the DSN without charset
+    $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
+    
+    try {
+        // Remove charset from the options array
+        $this->conn = new PDO($dsn, $username, $password, [
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION // Optional: to throw exceptions for errors
         ]);
+        // Optionally set client encoding
+        $this->conn->exec("SET NAMES 'utf8'");
+    } catch (PDOException $e) {
+        die("Could not connect to the database: " . $e->getMessage());
     }
+}
 
     
     public function query($query, $params = [])
