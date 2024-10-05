@@ -15,6 +15,7 @@ $router->post('/', 'UserControllers/Auth.php')->only('guest');
 $router->post('/register', 'UserControllers/Register.php')->only('guest');
 $router->post('/forgot', 'UserControllers/ForgotPassword.php')->only('guest');
 $router->get('/worker', 'UserControllers/Worker.php')->only('guest');
+$router->get('/hello','hello.php');
 
 $router->get('/logout', 'UserControllers/Logout.php')->only('auth');
 $router->post('/store/create', 'StoreControllers/Create.php')->only('auth');
